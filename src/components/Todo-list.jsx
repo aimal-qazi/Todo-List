@@ -5,30 +5,29 @@ import TodoItem from './Todo-item'
 const TodoList = () => {
   const inputField = useRef(null)
   const [todos, setTodo] = useState([])
-  let editIndex = -1
+  const [editIndex, setEditIndex] = useState(-1)
 
   const addTodo = () => {
-    if(inputField.current.value == '') return
+    if(inputField.current.value.trim() === '') return
+
     if(editIndex == -1) {
       setTodo([...todos, inputField.current.value])
-      inputField.current.value = ''
     } else {
-      let todosUpdated = [...todos]
-      todosUpdated[editIndex] = inputField.current.value
-      setTodo(todosUpdated)
-      editIndex = -1
-      inputField.current.value = ''
+      setTodo(
+        todos.map((todo, index) => index === editIndex ? inputField.current.value : todo)
+      )
+      setEditIndex(-1)
     }
+
+    inputField.current.value = ''
   }
 
   const deleteTodo = (index) => {
-    const updatedTodo = [...todos]
-    updatedTodo.splice(index, 1)
-    setTodo(updatedTodo)
+    setTodo(todos.filter((_, i) => i !== index))
   }
 
   const editTodo = (index, todo) => {
-    editIndex = index
+    setEditIndex(index)
     inputField.current.value = todo 
   }
   
@@ -41,7 +40,7 @@ const TodoList = () => {
               </div>
               <div className="form">
                 <input ref={inputField} type="text" placeholder='Add Todo'/>
-                <button onClick={addTodo}>Add</button>
+                <button onClick={addTodo}>{editIndex === -1 ? 'Add' : 'Edit'}</button>
               </div>
               <ul>
                 {todos.length == 0 ? 
