@@ -1,14 +1,14 @@
 import './CSS/todo-item.css'
 
-const TodoItem = () => {
+const TodoItem = ({todo, index, deleteFn, editFn}) => {
   return (
     <>
         <li>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, sint adipisci. Facilis magni eum est.</p>
+            <p>{todo}</p>
             <div>
-                <button>Delete</button>
-                <button>Edit</button>
-            </div>
+                <button onClick={() => deleteFn(index)}>Delete</button>
+                <button onClick={() => editFn(index, todo)}>Edit</button>
+            </div> 
         </li>
     </>
   )
